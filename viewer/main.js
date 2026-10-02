@@ -66,7 +66,8 @@ const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),.15,
 composer.addPass(bloom);composer.addPass(new OutputPass());
 
 function polyGeometry(kind){
-  // Native Roblox WedgePart and CornerWedgePart, in their documented local axes.
+  // Canonical preview primitives; the exporter maps the corner's local axes
+  // to native CornerWedgePart while preserving the same world-space geometry.
   const vertices=kind==='corner' ? [
     [-.5,-.5,-.5],[.5,-.5,-.5],[.5,-.5,.5],[-.5,-.5,.5],[-.5,.5,.5]
   ] : [

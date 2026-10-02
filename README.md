@@ -64,7 +64,7 @@ npx playwright install chromium
 npm run record
 ```
 
-The recorder captures actual rendered browser frames at 1920×1080 and encodes a 24 fps MP4. The camera sequence shows seven views over 50 seconds. The output is `media/RavenRidge-Walkthrough.mp4`, with recording details in `media/recording-evidence.json`. Set `CHROMIUM_PATH` if using an existing browser installation, and `DEMO_URL` if the dev server uses another address.
+The recorder captures actual rendered browser frames and encodes a 1920×1080, 24 fps MP4. The camera sequence shows seven views over 50 seconds. The output is `media/RavenRidge-Walkthrough.mp4`, with recording details in `media/recording-evidence.json`. Frames are cached under the ignored `.recording/` directory so an interrupted run can resume; changing scene or rendering sources selects a fresh cache. Set `CHROMIUM_PATH` if using an existing browser installation, and `DEMO_URL` if the dev server uses another address.
 
 For the independent native file check, install [rbxmk](https://github.com/Anaminus/rbxmk) and run:
 

@@ -1,0 +1,16 @@
+{
+  "format": "Actual WebGL browser recording of the authored Roblox geometry",
+  "resolution": [
+    1920,
+    1080
+  ],
+  "fps": 24,
+  "duration": 50,
+  "frames": 1200,
+  "errors": [],
+  "geometry": {
+    "parts": 5835,
+    "models": 16,
+    "seed": 1819
+  }
+}
