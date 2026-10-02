@@ -201,8 +201,8 @@ function renderAt(time){
   controls.target.fromArray(shot.look);camera.lookAt(controls.target);
   document.querySelector('#film-heading').textContent=shot.name;document.querySelector('#film-subtitle').textContent=shot.sub;
   document.documentElement.style.setProperty('--progress',`${time/duration*100}%`);
-  if(time>=8&&time<15)setGate(Math.min(1,Math.max(0,(time-10)/1.4)));
-  if(time>=35)setBunker(true);
+  setGate(Math.min(1,Math.max(0,(time-10)/1.4)));
+  setBunker(time>=35);
   setNight(time>=42);
   if(manual)renderer.render(scene,camera);else composer.render();
 }

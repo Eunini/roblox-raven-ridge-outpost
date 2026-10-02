@@ -4,6 +4,7 @@ import { chromium } from 'playwright';
 import fs from 'node:fs/promises';
 import { spawn } from 'node:child_process';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 
 const executablePath=process.env.CHROMIUM_PATH;
 const browser=await chromium.launch({headless:true,...(executablePath?{executablePath}:{}),args:['--no-sandbox','--enable-unsafe-swiftshader','--use-angle=swiftshader']});
@@ -36,12 +37,19 @@ await page.evaluate(()=>{
   };
 });
 await fs.mkdir('media',{recursive:true});
+const hash=createHash('sha256');
+for(const file of ['viewer/scene.json','viewer/main.js','viewer/style.css','viewer/fonts/BarlowCondensed-SemiBold.ttf','tools/record.mjs'])hash.update(await fs.readFile(file));
+const cacheDir=path.resolve('.recording',hash.digest('hex').slice(0,16));
+await fs.mkdir(cacheDir,{recursive:true});
 const output=path.resolve('media/RavenRidge-Walkthrough.mp4');
 const ffmpeg=spawn('ffmpeg',['-y','-hide_banner','-loglevel','warning','-f','image2pipe','-vcodec','mjpeg','-framerate',String(fps),'-i','pipe:0','-an','-c:v','libx264','-preset','medium','-crf','19','-pix_fmt','yuv420p','-movflags','+faststart',output],{stdio:['pipe','inherit','inherit']});
 const finished=new Promise((resolve,reject)=>{ffmpeg.on('error',reject);ffmpeg.on('exit',c=>c===0?resolve():reject(new Error(`ffmpeg exited ${c}`)));});
 const started=Date.now();
 for(let i=0;i<frames;i++){
-  const jpeg=Buffer.from(await page.evaluate(t=>window.captureRavenFrame(t),i/fps),'base64');
+  const cached=path.join(cacheDir,`frame-${String(i).padStart(6,'0')}.jpg`);
+  let jpeg;
+  try{jpeg=await fs.readFile(cached);}
+  catch{jpeg=Buffer.from(await page.evaluate(t=>window.captureRavenFrame(t),i/fps),'base64');await fs.writeFile(cached,jpeg);}
   if([0,600,960].includes(i))await fs.writeFile(`media/film-frame-${i}.jpg`,jpeg);
   if(!ffmpeg.stdin.write(jpeg))await new Promise(resolve=>ffmpeg.stdin.once('drain',resolve));
   if(i%60===0)console.log(`Recording ${Math.round(i/frames*100)}% | ${i}/${frames} | ${Math.round((Date.now()-started)/1000)}s elapsed`);
