@@ -6,7 +6,7 @@
   "scripts": {
     "generate": "python3 tools/build_scene.py",
     "dev": "vite viewer --host 0.0.0.0",
-    "build": "vite build viewer --outDir ../dist",
+    "build": "vite build viewer --outDir ../dist --emptyOutDir",
     "preview": "vite preview viewer --outDir ../dist --host 0.0.0.0",
     "verify": "python3 tools/verify_scene.py",
     "record": "node tools/record.mjs"

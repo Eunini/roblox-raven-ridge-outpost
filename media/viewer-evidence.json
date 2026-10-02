@@ -1,0 +1,18 @@
+{
+  "checks": [
+    "Rendered shared scene",
+    "Gate moves eight studs",
+    "Bunker slides 8.5 studs",
+    "Lighting toggle",
+    "Camera navigation with reduced motion",
+    "Mobile layout fits 390px"
+  ],
+  "errors": [],
+  "stats": {
+    "parts": 5835,
+    "models": 16,
+    "seed": 1819,
+    "instancedBatches": 39,
+    "previewPointLights": 8
+  }
+}

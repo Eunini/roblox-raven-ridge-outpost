@@ -43,7 +43,7 @@ const started=Date.now();
 for(let i=0;i<frames;i++){
   const jpeg=Buffer.from(await page.evaluate(t=>window.captureRavenFrame(t),i/fps),'base64');
   if(!ffmpeg.stdin.write(jpeg))await new Promise(resolve=>ffmpeg.stdin.once('drain',resolve));
-  if(i%120===0)console.log(`Recording ${Math.round(i/frames*100)}% | ${i}/${frames} | ${Math.round((Date.now()-started)/1000)}s elapsed`);
+  if(i%60===0)console.log(`Recording ${Math.round(i/frames*100)}% | ${i}/${frames} | ${Math.round((Date.now()-started)/1000)}s elapsed`);
 }
 ffmpeg.stdin.end();await finished;
 await fs.writeFile('media/recording-evidence.json',JSON.stringify({format:'Actual WebGL browser recording of the authored Roblox geometry',resolution:[1920,1080],fps,duration,frames,errors,geometry:await page.evaluate(()=>window.raven.data.stats)},null,2)+'\n');

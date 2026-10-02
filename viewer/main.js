@@ -25,7 +25,7 @@ scene.fog = new THREE.FogExp2('#b3c7c6', .00105);
 const camera = new THREE.PerspectiveCamera(47,innerWidth/innerHeight,.2,2200);
 const renderer = new THREE.WebGLRenderer({antialias:true,alpha:false,preserveDrawingBuffer:manual,powerPreference:'high-performance'});
 renderer.setSize(innerWidth,innerHeight);
-renderer.setPixelRatio(manual ? 1 : Math.min(devicePixelRatio,1.5));
+renderer.setPixelRatio(manual ? .65 : Math.min(devicePixelRatio,1.5));
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.shadowMap.autoUpdate = false;
@@ -48,7 +48,7 @@ scene.add(hemisphere);
 const sun = new THREE.DirectionalLight('#ffddb0',2.8);
 sun.position.set(-170,190,-100);
 sun.castShadow = true;
-sun.shadow.mapSize.set(3072,3072);
+sun.shadow.mapSize.set(2048,2048);
 Object.assign(sun.shadow.camera,{left:-172,right:172,top:172,bottom:-172,near:1,far:570});
 sun.shadow.bias=-.0002;
 sun.shadow.normalBias=.24;
@@ -90,7 +90,7 @@ function material(p){
     metalness:p.material==='Metal'?.38:0,transparent:!!p.transparent,opacity:1-(p.transparent||0)});
   if(p.material==='Neon'){m.emissive.set(p.color);m.emissiveIntensity=1.8;}
   if(p.material==='Glass'){m.roughness=.15;m.metalness=.45;}
-  if(['Concrete','Ground','Grass','Asphalt','Metal'].includes(p.material)){
+  if(['Concrete','Asphalt','Metal'].includes(p.material)){
     m.onBeforeCompile=shader=>{
       shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vWorldPoint;');
       shader.vertexShader=shader.vertexShader.replace('#include <worldpos_vertex>',`#include <worldpos_vertex>
@@ -146,8 +146,11 @@ async function load(){
       mesh.position.fromArray(p.pos);mesh.position.z-=p.size[2]/2+.04;
       mesh.rotation.y=Math.PI;scene.add(mesh);
     }
-    // Light range and placement are copied from the authored scene manifest.
-    data.parts.filter(p=>p.light).forEach(p=>{
+    // Keep every emissive fixture; prioritize interior point lights in the web
+    // preview. The Studio export contains the full native lighting rig.
+    const lightParts=data.parts.filter(p=>p.light);
+    const focusedLights=[...lightParts.filter(p=>p.group==='Command'||p.group==='Maintenance'),...lightParts.filter(p=>p.group==='Lighting').slice(0,2)];
+    focusedLights.forEach(p=>{
       const light=new THREE.PointLight(p.color,p.light.brightness*11,p.light.range,1.5);
       light.position.fromArray(p.pos);scene.add(light);practical.push(light);
     });
@@ -158,7 +161,7 @@ async function load(){
     document.querySelector('#loading').remove();
     window.raven={ready:true,data,duration,renderAt,view,renderer,camera,controls,setNight,setGate,setBunker,
       state:()=>({night,gateOpen,bunkerOpen,gateY:dynamic.gate[0].mesh.position.y,doorX:dynamic.bunker[0].mesh.position.x}),
-      stats:()=>({...data.stats,instancedBatches:batches.size,triangles:renderer.info.render.triangles})};
+      stats:()=>({...data.stats,instancedBatches:batches.size,previewPointLights:practical.length})};
     if(manual||params.has('cinema')){document.body.classList.add('cinema');renderAt(0);}
     if(params.has('cinema')&&!manual)startTour();
     if(!manual)animate();
@@ -198,7 +201,7 @@ function renderAt(time){
   if(time>=8&&time<15)setGate(Math.min(1,Math.max(0,(time-10)/1.4)));
   if(time>=35)setBunker(true);
   setNight(time>=42);
-  composer.render();
+  if(manual)renderer.render(scene,camera);else composer.render();
 }
 function startTour(){playing=true;transition=null;tourStart=performance.now();controls.enabled=false;document.body.classList.add('cinema');}
 function stopTour(){playing=false;controls.enabled=true;document.body.classList.remove('cinema');}

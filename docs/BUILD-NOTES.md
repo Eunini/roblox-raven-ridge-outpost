@@ -12,7 +12,7 @@ The landscape is an original low-poly alpine setting. Native wedge pairs tile a 
 
 `tools/build_scene.py` generates the native `.rbxlx` place and `viewer/scene.json` together. Position, orientation, size, color, groups, lights, labels, and mechanism tags all originate in this generator. `src/` contains the embedded native Luau scripts. A seeded generator keeps the scenery reproducible.
 
-The web preview renders the manifest with Three.js, instancing repeated geometry for fewer draw calls. It also supplies orbit controls, fixed camera views, day/dusk lighting, and previews of the two architectural mechanisms.
+The web preview renders the manifest with Three.js, instancing repeated geometry for fewer draw calls. It also supplies orbit controls, fixed camera views, day/dusk lighting, and previews of the two architectural mechanisms. The browser uses eight prioritized point lights and caches shadows until a mechanism changes; the Studio export contains the full native lighting rig.
 
 ## Native interactions
 
