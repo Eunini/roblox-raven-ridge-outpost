@@ -42,6 +42,7 @@ const finished=new Promise((resolve,reject)=>{ffmpeg.on('error',reject);ffmpeg.o
 const started=Date.now();
 for(let i=0;i<frames;i++){
   const jpeg=Buffer.from(await page.evaluate(t=>window.captureRavenFrame(t),i/fps),'base64');
+  if([0,600,960].includes(i))await fs.writeFile(`media/film-frame-${i}.jpg`,jpeg);
   if(!ffmpeg.stdin.write(jpeg))await new Promise(resolve=>ffmpeg.stdin.once('drain',resolve));
   if(i%60===0)console.log(`Recording ${Math.round(i/frames*100)}% | ${i}/${frames} | ${Math.round((Date.now()-started)/1000)}s elapsed`);
 }

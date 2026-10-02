@@ -27,7 +27,7 @@ Prompt handlers run on the server, check character distance, and guard against o
 
 Geometry count, coordinates, sizes, anchoring, unique references, spawn, prompts, and source inclusion are checked by `tools/verify_scene.py`. `tools/roundtrip.lua` additionally uses rbxmk to decode the native XML, encode a binary `.rbxl`, decode that file again, and compare instance counts.
 
-The video is a real browser recording of the same authored geometry, with deterministic camera motion and titles. It is explicitly labeled as a browser render. It is not footage recorded inside Roblox Studio or Roblox gameplay.
+The video is a real browser recording of the same authored geometry, with deterministic camera motion and titles. Capture uses a vertex-lit diffuse preview shader and a smaller internal framebuffer for the software GPU; titles and encoded output are 1920×1080. It is explicitly labeled as a browser render. It is not footage recorded inside Roblox Studio or Roblox gameplay.
 
 Roblox Studio is unavailable in the Linux build environment. Native rendering, prompt behavior, player movement, collision edge cases, and multi-client behavior still require a Studio playtest on Windows or macOS. The file-format round trip is useful export validation, not a substitute for that runtime check.
 

@@ -86,8 +86,11 @@ const temp = new THREE.Object3D();
 function material(p){
   const key=`${p.color}/${p.material}/${p.transparent||0}`;
   if(materials.has(key))return materials.get(key);
-  const m=new THREE.MeshStandardMaterial({color:p.color,roughness:p.material==='Metal'?.52:.91,
-    metalness:p.material==='Metal'?.38:0,transparent:!!p.transparent,opacity:1-(p.transparent||0)});
+  const common={color:p.color,transparent:!!p.transparent,opacity:1-(p.transparent||0)};
+  // Vertex-lit diffuse materials keep deterministic recording practical on
+  // software-only GPUs. Geometry, colors, transforms, and lights stay shared.
+  const m=manual ? new THREE.MeshLambertMaterial(common) : new THREE.MeshStandardMaterial({...common,
+    roughness:p.material==='Metal'?.52:.91,metalness:p.material==='Metal'?.38:0});
   if(p.material==='Neon'){m.emissive.set(p.color);m.emissiveIntensity=1.8;}
   if(p.material==='Glass'){m.roughness=.15;m.metalness=.45;}
   if(['Concrete','Asphalt','Metal'].includes(p.material)){

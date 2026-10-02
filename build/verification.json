@@ -1,0 +1,27 @@
+{
+  "nativeStructure": {
+    "passed": true,
+    "parts": 5835,
+    "models": 16,
+    "proximityPrompts": 2
+  },
+  "independentFormatCheck": {
+    "passed": true,
+    "tool": "rbxmk 0.9.1",
+    "operation": "XML to binary to decode; unchanged instance counts"
+  },
+  "luauSyntax": {
+    "passed": true,
+    "compiler": "Luau 0.740",
+    "files": [
+      "src/Outpost.server.luau",
+      "src/Tour.client.luau"
+    ]
+  },
+  "browserVerification": "media/viewer-evidence.json",
+  "robloxStudioRuntime": "Not run: Studio is unavailable in this Linux environment",
+  "sha256": {
+    "RavenRidge.rbxl": "965c672d34636fe93a7605533d5bb79fc89aeb1f2f14c6dfa3cef5031add7060",
+    "RavenRidge.rbxlx": "2a0e42126236d3a853fafc7372baaa63badadcdc5cde23c665f7232ae055ff8d"
+  }
+}
