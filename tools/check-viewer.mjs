@@ -1,0 +1,28 @@
+import { chromium } from 'playwright';
+import fs from 'node:fs/promises';
+import assert from 'node:assert/strict';
+
+const browser=await chromium.launch({headless:true,...(process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH}:{}),args:['--no-sandbox','--enable-unsafe-swiftshader','--use-angle=swiftshader']});
+const context=await browser.newContext({viewport:{width:1440,height:900},reducedMotion:'reduce'});
+const page=await context.newPage();const errors=[];
+page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
+await page.goto(process.env.DEMO_URL||'http://127.0.0.1:4317/',{waitUntil:'networkidle',timeout:90000});
+await page.waitForFunction(()=>window.raven?.ready,{timeout:90000});
+await page.screenshot({path:'media/viewer-desktop.jpg',type:'jpeg',quality:90});
+const before=await page.evaluate(()=>window.raven.state());
+await page.getByRole('button',{name:'Open gate',exact:true}).click();
+const gate=await page.evaluate(()=>window.raven.state());
+assert.equal(gate.gateY-before.gateY,8,'Gate geometry must move eight studs');
+await page.getByRole('button',{name:'Open bunker',exact:true}).click();
+const door=await page.evaluate(()=>window.raven.state());assert.equal(door.doorX-before.doorX,8.5);
+await page.getByRole('button',{name:'Dusk lighting',exact:true}).click();assert.equal((await page.evaluate(()=>window.raven.state())).night,true);
+await page.getByRole('button',{name:'Interior',exact:true}).click();
+const camera=await page.evaluate(()=>window.raven.camera.position.toArray());assert.deepEqual(camera,[-43,8,6]);
+await page.getByRole('button',{name:'Overview',exact:true}).click();
+await page.getByRole('button',{name:'Daylight',exact:true}).click();
+await page.setViewportSize({width:390,height:844});
+assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Mobile layout must fit');
+await page.screenshot({path:'media/viewer-mobile.jpg',type:'jpeg',quality:90});
+const evidence={checks:['Rendered shared scene','Gate moves eight studs','Bunker slides 8.5 studs','Lighting toggle','Camera navigation with reduced motion','Mobile layout fits 390px'],errors,stats:await page.evaluate(()=>window.raven.stats())};
+await fs.writeFile('media/viewer-evidence.json',JSON.stringify(evidence,null,2)+'\n');
+await browser.close();assert.equal(errors.length,0,errors.join('\n'));console.log(JSON.stringify(evidence,null,2));

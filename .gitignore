@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.recording/
+media/*.mp4
+media/*.webm
+build/*.rbxl
+*.log

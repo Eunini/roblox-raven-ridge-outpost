@@ -1,0 +1,16 @@
+{
+  "name": "raven-ridge-roblox-outpost",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate": "python3 tools/build_scene.py",
+    "dev": "vite viewer --host 0.0.0.0",
+    "build": "vite build viewer --outDir ../dist",
+    "preview": "vite preview viewer --outDir ../dist --host 0.0.0.0",
+    "verify": "python3 tools/verify_scene.py",
+    "record": "node tools/record.mjs"
+  },
+  "dependencies": {"three": "0.180.0"},
+  "devDependencies": {"vite": "7.1.7", "playwright": "1.56.1"}
+}

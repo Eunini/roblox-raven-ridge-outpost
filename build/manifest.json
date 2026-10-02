@@ -1,0 +1,25 @@
+{
+  "stats": {
+    "parts": 5835,
+    "models": 16,
+    "seed": 1819
+  },
+  "groups": {
+    "Landscape": 2388,
+    "Mountains": 152,
+    "Forest": 1938,
+    "Roads": 63,
+    "Perimeter": 371,
+    "Watchtower": 244,
+    "Checkpoint": 64,
+    "Command": 124,
+    "Helipad": 35,
+    "Logistics": 278,
+    "Motor pool": 40,
+    "Maintenance": 68,
+    "Utilities": 9,
+    "Barracks": 16,
+    "Lighting": 30,
+    "Details": 15
+  }
+}
