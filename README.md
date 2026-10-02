@@ -2,7 +2,7 @@
 
 **An original alpine military outpost for Roblox.** A newly built environment portfolio piece with modular architecture, custom vehicles, detailed interiors, and an explorable fortified compound.
 
-[Explore the interactive preview](https://camie-ace.github.io/roblox-raven-ridge-outpost/) · [Download the walkthrough video](https://github.com/camie-ace/roblox-raven-ridge-outpost/releases/latest/download/RavenRidge-Walkthrough.mp4) · [Download the Roblox place](https://github.com/camie-ace/roblox-raven-ridge-outpost/releases/latest/download/RavenRidge.rbxl)
+[Explore the interactive preview](https://eunini.github.io/roblox-raven-ridge-outpost/) · [Download the walkthrough video](https://github.com/Eunini/roblox-raven-ridge-outpost/releases/latest/download/RavenRidge-Walkthrough.mp4) · [Download the Roblox place](https://github.com/Eunini/roblox-raven-ridge-outpost/releases/latest/download/RavenRidge.rbxl)
 
 ![Raven Ridge environment overview](media/overview.jpg)
 
@@ -19,7 +19,7 @@ The generated environment contains **5,835 anchored parts in 16 named models**. 
 
 ## Open in Roblox Studio
 
-1. Download `RavenRidge.rbxl` from [Releases](https://github.com/camie-ace/roblox-raven-ridge-outpost/releases/latest). The editable XML `RavenRidge.rbxlx` is also included.
+1. Download `RavenRidge.rbxl` from [Releases](https://github.com/Eunini/roblox-raven-ridge-outpost/releases/latest). The editable XML `RavenRidge.rbxlx` is also included.
 2. Open the file in Roblox Studio on Windows or macOS using **File → Open from File**.
 3. The environment is already in `Workspace/RavenRidge`. Lighting, one approach-road spawn, server interactions, and the portfolio camera script are included.
 4. Press **Play** to explore. Use the proximity prompts at the checkpoint control and bunker door. **F6** cycles presentation views, **F7** returns to the character, and **L** changes lighting locally.

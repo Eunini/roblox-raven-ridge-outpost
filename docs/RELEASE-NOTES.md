@@ -13,4 +13,4 @@ Native export structure checks, independent XML/binary round-trip checks, and Lu
 
 The video records the shared geometry in a browser renderer and is labeled accordingly. Roblox Studio is not available in the Linux build environment, so native rendering, player collisions, and runtime interaction behavior still require a Studio playtest. This is newly created portfolio work, not a previous client commission.
 
-[Live interactive preview](https://camie-ace.github.io/roblox-raven-ridge-outpost/)
+[Live interactive preview](https://eunini.github.io/roblox-raven-ridge-outpost/)
