@@ -433,6 +433,13 @@ def matrix(p):
     # Three.js / CFrame.fromEulerAnglesXYZ: Rx * Ry * Rz.
     return [c*e,-c*f,d,a*f+b*d*e,a*e-b*d*f,-b*c,b*f-a*d*e,b*e+a*d*f,a*c]
 
+def native_matrix(p):
+    m=matrix(p)
+    # Native CornerWedgePart's upper vertex is (+X,+Y,-Z). The scene's
+    # canonical corner uses (-X,+Y,+Z), so its native local basis turns 180°.
+    if p['shape']=='corner':return [-m[0],m[1],-m[2],-m[3],m[4],-m[5],-m[6],m[7],-m[8]]
+    return m
+
 serial=0
 def item(parent,cls,name):
     global serial; serial+=1
@@ -470,11 +477,16 @@ def export(scene):
         el,pr=item(folders[p['group']],cls,p['name']); native.append(el)
         prop(pr,'bool','Anchored',True); prop(pr,'bool','CanCollide',p.get('material') not in ('Neon','Glass') and not p.get('spawn',False))
         prop(pr,'bool','CanTouch',False); prop(pr,'bool','CastShadow',p.get('castShadow',p['material']!='Neon'))
-        vec(pr,'size',p['size']); frame(pr,'CFrame',p['pos'],matrix(p))
+        vec(pr,'size',p['size']); frame(pr,'CFrame',p['pos'],native_matrix(p))
         rgb=int(p['color'][1:],16); prop(pr,'Color3uint8','Color3uint8',0xff000000|rgb)
         prop(pr,'token','Material',materials[p['material']]); prop(pr,'float','Transparency',p.get('transparent',0))
         for surface in ('TopSurface','BottomSurface'): prop(pr,'token',surface,0)
-        if cls in ('Part','SpawnLocation'): prop(pr,'token','shape',0 if p['shape']=='sphere' else 2 if p['shape']=='cylinder' else 1)
+        if cls in ('Part','SpawnLocation'):prop(pr,'token','shape',2 if p['shape']=='cylinder' else 1)
+        if p['shape']=='sphere':
+            # Unlike PartType.Ball, SpecialMesh Sphere preserves nonuniform
+            # ellipsoids for fuselage, canopy, dishes, and original rock props.
+            mesh,mpr=item(el,'SpecialMesh','Ellipsoid');prop(mpr,'token','MeshType',3)
+            vec(mpr,'Scale',[1,1,1]);vec(mpr,'Offset',[0,0,0])
         if p.get('spawn'): prop(pr,'bool','Neutral',True); prop(pr,'float','Duration',0)
         if p.get('light'):
             le,lp=item(el,'PointLight','WarmLighting'); color(lp,'Color',p['color']); prop(lp,'float','Range',p['light']['range']); prop(lp,'float','Brightness',p['light']['brightness'])

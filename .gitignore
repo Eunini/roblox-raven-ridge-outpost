@@ -5,3 +5,5 @@ media/*.mp4
 media/*.webm
 build/*.rbxl
 *.log
+__pycache__/
+*.pyc

@@ -1,6 +1,7 @@
 """Meaningful checks on native place geometry and structural export integrity."""
 import json, math, pathlib, xml.etree.ElementTree as ET
 from collections import Counter
+from build_scene import matrix
 root=pathlib.Path(__file__).resolve().parents[1]
 scene=json.loads((root/'viewer/scene.json').read_text())
 tree=ET.parse(root/'build/RavenRidge.rbxlx')
@@ -30,4 +31,19 @@ def native_key(i):
     pr=i.find('Properties');pos=pr.find('CoordinateFrame[@name="CFrame"]');sz=pr.find('Vector3[@name="size"]')
     return (pr.find('string[@name="Name"]').text,tuple(round(float(pos.find(a).text),4) for a in ('X','Y','Z')),tuple(round(float(sz.find(a).text),4) for a in ('X','Y','Z')))
 assert Counter(native_key(i) for i in native)==Counter((p['name'],tuple(p['pos']),tuple(p['size'])) for p in scene['parts'])
+by_geometry={native_key(i):i for i in native}
+for p in scene['parts']:
+    i=by_geometry[(p['name'],tuple(p['pos']),tuple(p['size']))]
+    if p['shape']=='sphere':
+        assert i.find('Item[@class="SpecialMesh"]/Properties/token[@name="MeshType"]').text=='3','Native ellipsoid mesh missing'
+    if p['shape']=='corner':
+        cf=i.find('Properties/CoordinateFrame[@name="CFrame"]')
+        native_rot=[float(cf.find('R'+str(r)+str(c)).text) for r in range(3) for c in range(3)]
+        native_apex=[p['size'][0]/2,p['size'][1]/2,-p['size'][2]/2]
+        expected_apex=[-p['size'][0]/2,p['size'][1]/2,p['size'][2]/2]
+        preview_rot=matrix(p)
+        for row in range(3):
+            actual=sum(native_rot[row*3+j]*native_apex[j] for j in range(3))
+            expected=sum(preview_rot[row*3+j]*expected_apex[j] for j in range(3))
+            assert abs(actual-expected)<.0001,'Native corner orientation differs from preview'
 print(json.dumps({'verified':True,'parts':len(native),'referents':len(refs),'groups':scene['stats']['models'],'interactions':2},indent=2))

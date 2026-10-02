@@ -21,7 +21,11 @@
   "browserVerification": "media/viewer-evidence.json",
   "robloxStudioRuntime": "Not run: Studio is unavailable in this Linux environment",
   "sha256": {
-    "RavenRidge.rbxl": "965c672d34636fe93a7605533d5bb79fc89aeb1f2f14c6dfa3cef5031add7060",
-    "RavenRidge.rbxlx": "2a0e42126236d3a853fafc7372baaa63badadcdc5cde23c665f7232ae055ff8d"
-  }
+    "RavenRidge.rbxl": "b9551e6961cf7516f440c8e0ec2336740aca3ee3efd94d8dc7ebfc0d93fbcfc1",
+    "RavenRidge.rbxlx": "35a8af31aa77057c1c4e499934f21311dcf6524bf41bd18d17f68a1a24b55c21"
+  },
+  "nativeGeometryConventionChecks": [
+    "Corner-wedge upper vertices agree with browser world positions",
+    "Nonuniform ellipsoids use native SpecialMesh spheres"
+  ]
 }

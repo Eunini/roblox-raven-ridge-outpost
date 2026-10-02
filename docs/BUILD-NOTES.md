@@ -12,6 +12,8 @@ The landscape is an original low-poly alpine setting. Native wedge pairs tile a 
 
 `tools/build_scene.py` generates the native `.rbxlx` place and `viewer/scene.json` together. Position, orientation, size, color, groups, lights, labels, and mechanism tags all originate in this generator. `src/` contains the embedded native Luau scripts. A seeded generator keeps the scenery reproducible.
 
+The exporter accounts for native primitive conventions: cylinders use the X axis, corner wedges receive a local 180-degree basis correction, and nonuniform ellipsoids use native `SpecialMesh` Sphere shapes. The geometry verifier checks corner-apex agreement and the presence of ellipsoid meshes, in addition to part positions and sizes.
+
 The web preview renders the manifest with Three.js, instancing repeated geometry for fewer draw calls. It also supplies orbit controls, fixed camera views, day/dusk lighting, and previews of the two architectural mechanisms. The browser uses eight prioritized point lights and caches shadows until a mechanism changes; the Studio export contains the full native lighting rig.
 
 ## Native interactions
@@ -42,5 +44,7 @@ Parts are anchored, and nonessential touch events are disabled. The repeated nat
 - [Roblox proximity prompt API](https://create.roblox.com/docs/reference/engine/classes/ProximityPrompt)
 - [Roblox client/server security guidance](https://github.com/Roblox/creator-docs/blob/main/content/en-us/scripting/security/client-server-boundary.md)
 - [rbxmk native file tools](https://github.com/Anaminus/rbxmk)
+- [Native wedge and corner-wedge vertex coordinates](https://github.com/FrostDracony/Roblox/blob/master/Tutorials/GetCornersOfAllBaseParts/GetCornersOfWedgeAndCornerWedge.md)
+- [Native sphere mesh scaling](https://create.roblox.com/docs/reference/engine/classes/SpecialMesh/MeshType)
 
 Barlow Condensed is distributed under the SIL Open Font License, included in `viewer/fonts/OFL.txt`. Three.js and Vite are third-party dependencies with their own licenses. The scene geometry and project code are newly authored portfolio work.
